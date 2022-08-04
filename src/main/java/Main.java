@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 public class Main {
     // Input: --help
@@ -7,25 +6,33 @@ public class Main {
     // Cmd: -w - сколько работать
     //      -b - сколько отдыхать
     //      --help - вызвать помощь
-    // Input: -w 1 -b 1
-//    public static int test = 0;
+    // Input: -w 1 -b 1 -count 2 -m 2
 
     public static void main(String[] args) throws InterruptedException {
-        System.out.println("Введите время для работы и отдыха");
+        System.out.println("Добро пожаловать в приложение Pomodoro!!!\n" +
+                           "Введите \"--help\" - для вызова справки");
+
+
         String[] userInput = new Scanner(System.in).nextLine().split(" ");
 
         // Всё время в минутах
         int workTime = 1;
         int breakTime = 1;
 
+        int help = 0;
+        int count = 1;
+        int factor = 1;
+
         for (int i = 0; i < userInput.length; i++) {
             switch (userInput[i]) {
                 case ("--help"):
                     System.out.println("\n" +
-                            "Pomodoro - это приложение для улучшения личной эффективности.\n" +
-                            "-w - сколько работать\n" +
-                            "-b - сколько отдыхать\n" +
+                            "Pomodoro - сделай свое время более эффективным\n" +
+                            "-w - время работы, сколько хочешь работать.\n" +
+                            "-b - время отдыха, сколько хочешь отдыхать.\n" +
+                            "-count - количество итераций.\n" +
                             "--help - вызвать помощь\n");
+                    help = 1;
                     break;
 
                 case ("-w"):
@@ -35,16 +42,28 @@ public class Main {
                 case ("-b"):
                     breakTime = Integer.parseInt(userInput[++i]);
                     break;
+
+                case ("-count"):
+                    count = Integer.parseInt(userInput[++i]);
+                    break;
+
+                case ("-m"):
+                    factor = Integer.parseInt(userInput[++i]);
+                    break;
             }
         }
 
-        System.out.printf("workTime = %d, workBreak = %d", workTime, breakTime);
-        System.out.println();
+        if (help == 0) {
+            long startTime = System.currentTimeMillis();
 
-        long startTime = System.currentTimeMillis();
-        timer(workTime, breakTime, ProgressBar.sizeBreak, ProgressBar.sizeWork);
-        long endTime = System.currentTimeMillis();
-        System.out.println("Таймер работал " + (endTime - startTime) / (1000 * 60) + " min");
+            for (int i = 1; i <= count; i++) {
+                timer(workTime, breakTime, ProgressBar.sizeBreak, ProgressBar.sizeWork);
+                workTime *= factor;
+            }
+
+            long endTime = System.currentTimeMillis();
+            System.out.println("Pomodoro таймер истек: " + (endTime - startTime) / (1000 * 60) + " min");
+        }
     }
 
     public static void timer(int workTimeMin, int breakTimeMin, int sizeBreak, int sizeWork) throws InterruptedException {
