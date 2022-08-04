@@ -58,7 +58,9 @@ public class Main {
 
             for (int i = 1; i <= count; i++) {
                 timer(workTime, breakTime, ProgressBar.sizeBreak, ProgressBar.sizeWork);
-                workTime *= factor;
+                if (factor > 1) {
+                    workTime *= factor;
+                }
             }
 
             long endTime = System.currentTimeMillis();
