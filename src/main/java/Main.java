@@ -18,10 +18,6 @@ public class Main {
         int workTime = 1;
         int breakTime = 1;
 
-        int sizeBreak = 30;
-        int sizeWork = 30;
-
-
         for (int i = 0; i < userInput.length; i++) {
             switch (userInput[i]) {
                 case ("--help"):
@@ -43,43 +39,16 @@ public class Main {
         }
 
         System.out.printf("workTime = %d, workBreak = %d", workTime, breakTime);
+        System.out.println();
 
         long startTime = System.currentTimeMillis();
-        timer(workTime, breakTime, sizeBreak, sizeWork);
+        timer(workTime, breakTime, ProgressBar.sizeBreak, ProgressBar.sizeWork);
         long endTime = System.currentTimeMillis();
         System.out.println("Таймер работал " + (endTime - startTime) / (1000 * 60) + " min");
     }
 
     public static void timer(int workTimeMin, int breakTimeMin, int sizeBreak, int sizeWork) throws InterruptedException {
-        printProgress("Work progress:: ", workTimeMin, sizeWork);
-        printProgress("Break progress:: ", breakTimeMin, sizeBreak);
-    }
-
-    private static void printProgress(String process, int time, int size) throws InterruptedException {
-        int length;
-        int rep;
-        length = 60 * time / size;
-        rep = 60 * time / length;
-        int stretchb = size / (3 * time);
-        for (int i = 1; i <= rep; i++) {
-            double x = i;
-            x = 1.0 / 3.0 * x;
-            x *= 10;
-            x = Math.round(x);
-            x /= 10;
-            double w = time * stretchb;
-            double percent = (x / w) * 1000;
-            x /= stretchb;
-            x *= 10;
-            x = Math.round(x);
-            x /= 10;
-            percent = Math.round(percent);
-            percent /= 10;
-            System.out.print(process + percent + "% " + (" ").repeat(5 - (String.valueOf(percent).length())) + "[" + ("#").repeat(i) + ("-").repeat(rep - i) + "]    ( " + x + "min / " + time + "min )" + "\r");
-            if (true) {
-                TimeUnit.SECONDS.sleep(length);
-            }
-        }
-        System.out.println();
+        ProgressBar.printProgress("Work progress:: ", workTimeMin, sizeWork);
+        ProgressBar.printProgress("Break progress:: ", breakTimeMin, sizeBreak);
     }
 }
